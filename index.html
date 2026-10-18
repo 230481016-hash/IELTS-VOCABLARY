@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IELTS Writing Vocab</title>
+<style>
+:root{--bg:#f3f6f4;--card:#fff;--ink:#17231f;--mute:#5f6f69;--line:#d5ded9;--acc:#0b6b57;--acc-ink:#fff;--ok:#1b7f3b;--bad:#b3261e;--okbg:#e2f3e7;--badbg:#fbe6e4}
+@media (prefers-color-scheme:dark){:root{--bg:#0f1714;--card:#18231f;--ink:#e8f0ec;--mute:#93a59d;--line:#2a3a34;--acc:#4fd1b0;--acc-ink:#07261e;--ok:#6fdc8c;--bad:#ff8a80;--okbg:#17321f;--badbg:#3a1c1a}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 Georgia,"Times New Roman",serif}
+main{max-width:640px;margin:0 auto;padding:16px 16px 48px}
+h1{font-size:26px;margin:8px 0 2px;letter-spacing:-.01em}
+.sub{color:var(--mute);margin:0 0 14px;font-family:system-ui,sans-serif;font-size:14px}
+nav{display:flex;gap:6px;margin-bottom:14px;font-family:system-ui,sans-serif}
+nav button{flex:1;padding:10px 4px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;font-size:14px;cursor:pointer}
+nav button[aria-selected=true]{background:var(--acc);color:var(--acc-ink);border-color:var(--acc)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px}
+.flash{min-height:200px;display:flex;flex-direction:column;justify-content:center;cursor:pointer}
+.big{font-size:34px;margin:0 0 4px;overflow-wrap:anywhere}
+.tr{font-size:22px;color:var(--acc);margin:6px 0}
+.pos{font-family:system-ui,sans-serif;font-size:13px;color:var(--mute)}
+.ex{border-left:3px solid var(--acc);padding-left:12px;margin:14px 0 0;font-style:italic}
+.ex b{color:var(--acc)}
+.hint{font:13px system-ui,sans-serif;color:var(--mute);margin-top:14px}
+button.p{background:var(--acc);color:var(--acc-ink);border:0;border-radius:10px;padding:11px 18px;font:600 15px system-ui,sans-serif;cursor:pointer}
+button.s{background:transparent;color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:10px 16px;font:15px system-ui,sans-serif;cursor:pointer}
+button.sp{background:none;border:0;font-size:22px;cursor:pointer;padding:0 6px;vertical-align:middle}
+.row{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+.row>button{flex:1}
+input,textarea,select{width:100%;padding:11px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:16px system-ui,sans-serif;margin:4px 0 12px}
+label{font:600 13px system-ui,sans-serif;color:var(--mute)}
+:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.q{font-size:20px;margin:0 0 14px}
+.fb{margin-top:12px;padding:12px;border-radius:10px;font-family:system-ui,sans-serif}
+.fb.ok{background:var(--okbg);color:var(--ok)}.fb.no{background:var(--badbg);color:var(--bad)}
+.top{display:flex;justify-content:space-between;align-items:center;gap:8px;font:14px system-ui,sans-serif;color:var(--mute);margin-bottom:10px}
+.top select{width:auto;margin:0;padding:6px 8px;font-size:14px}
+.item{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.item b{font-size:17px}.item span{font:14px system-ui,sans-serif;color:var(--mute)}
+.item button{background:none;border:0;color:var(--bad);font-size:20px;cursor:pointer}
+.hide{display:none}
+</style>
+</head>
+<body>
+<main>
+<h1>IELTS Writing Vocab</h1>
+<p class="sub" id="stat"></p>
+<nav role="tablist">
+<button role="tab" data-t="study">Карточка</button>
+<button role="tab" data-t="practice">Жаттығу</button>
+<button role="tab" data-t="add">Сөз қосу</button>
+<button role="tab" data-t="list">Тізім</button>
+</nav>
+
+<section id="study" class="card"></section>
+<section id="practice" class="card hide"></section>
+
+<section id="add" class="card hide">
+<label for="w">Сөз (English)</label><input id="w" autocomplete="off">
+<label for="kz">Қазақша аудармасы</label><input id="kz" autocomplete="off">
+<label for="tr">Орысша аудармасы</label><input id="tr" autocomplete="off">
+<label for="pos">Сөз табы</label>
+<select id="pos"><option>noun</option><option>verb</option><option>adjective</option><option>adverb</option><option>phrase</option></select>
+<label for="ex">Мысал сөйлем (сөзді өзгертпей жаз)</label><textarea id="ex" rows="2"></textarea>
+<button class="p" id="save">Сақтау</button>
+<p class="sub" id="msg" role="status"></p>
+</section>
+
+<section id="list" class="card hide">
+<div id="items"></div>
+<div class="row">
+<button class="s" id="exp">Экспорт (JSON)</button>
+<button class="s" id="imp">Импорт</button>
+<button class="s" id="impu">Импорт + жаңарту</button>
+<input type="file" id="file" accept=".json" class="hide">
+</div>
+<p class="hint">«Импорт» тек жаңа сөздерді қосады. «Импорт + жаңарту» бар сөздердің аудармасы мен мысалын файлдағымен ауыстырады (прогресс сақталады).</p>
+</section>
+</main>
+
+<script>
+const KEY='ielts_vocab_v1', DIR='ielts_dir';
+const seed=[
+['mitigate','жеңілдету, азайту','verb','Governments should take measures to mitigate the effects of climate change.'],
+['detrimental','зиянды','adjective','Excessive screen time is detrimental to children\'s health.'],
+['substantial','айтарлықтай, едәуір','adjective','There has been a substantial increase in the number of cars.'],
+['alleviate','жеңілдету (қиындықты)','verb','Building new roads may alleviate traffic congestion.'],
+['advocate','жақтау, қолдау','verb','Many experts advocate stricter laws on pollution.'],
+['crucial','аса маңызды','adjective','Education is crucial for economic development.'],
+['exacerbate','ушықтыру, нашарлату','verb','Poor planning can exacerbate the housing crisis.'],
+['undermine','әлсірету, шайқалту','verb','Corruption undermines public trust in institutions.'],
+['sustainable','тұрақты, табиғатқа зиянсыз','adjective','Cities need sustainable sources of energy.']
+];
+const $=s=>document.querySelector(s);
+const tx=w=>[w.kz,w.tr].filter(Boolean).join(' · ');
+const today=()=>new Date().toISOString().slice(0,10);
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const rx=w=>new RegExp('\\b'+w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'\\b','i');
+function load(){try{const d=JSON.parse(localStorage.getItem(KEY));if(d&&d.length)return d}catch(e){}
+  return seed.map((s,i)=>({id:Date.now()+i,w:s[0],kz:s[1],tr:'',pos:s[2],ex:s[3],box:1,added:today()}))}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(words))}catch(e){}}
+let words=load(), dir='en', D={s:[],p:[]}, last={s:null,p:null}, cur=null, flipped=false, answered=false;
+try{dir=localStorage.getItem(DIR)||'en'}catch(e){}
+
+/* Колода: әр сөз бір айналымда бір рет шығады, білмейтіндері бұрын */
+function mk(){return words.map(w=>({id:w.id,k:w.box+Math.random()*2})).sort((a,b)=>a.k-b.k).map(x=>x.id)}
+function take(k){
+  D[k]=D[k].filter(id=>words.some(w=>w.id===id));
+  if(!D[k].length){D[k]=mk();if(D[k].length>1&&D[k][0]===last[k])D[k].push(D[k].shift())}
+  const id=D[k].shift();last[k]=id;return words.find(w=>w.id===id)}
+function requeue(k,id,pos){D[k].splice(Math.min(pos,D[k].length),0,id)}
+function reset(){D={s:[],p:[]}}
+function stats(){const t=words.filter(w=>w.added===today()).length,l=words.filter(w=>w.box>=4).length;
+  $('#stat').textContent=`Барлығы: ${words.length} сөз · Бүгін қосылды: ${t} · Жақсы білетін: ${l}`}
+function say(w){try{const u=new SpeechSynthesisUtterance(w);u.lang='en-GB';speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}}
+
+function tab(t){document.querySelectorAll('nav button').forEach(b=>b.setAttribute('aria-selected',b.dataset.t===t));
+  ['study','practice','add','list'].forEach(id=>$('#'+id).classList.toggle('hide',id!==t));
+  if(t==='study')nextCard(); if(t==='practice')nextQ(); if(t==='list')renderList(); stats()}
+
+/* Карточка */
+function nextCard(){cur=take('s');flipped=false;renderCard()}
+function renderCard(){
+  if(!cur){$('#study').innerHTML='<p>Алдымен сөз қос.</p>';return}
+  const front=dir==='en'?`<p class="big">${esc(cur.w)} <button class="sp" id="spk" aria-label="Айту">🔊</button></p><p class="pos">${esc(cur.pos||'')}</p>`
+                        :`<p class="big">${esc(cur.kz||cur.tr)}</p><p class="pos">${esc(cur.kz&&cur.tr?cur.tr:'')}</p>`;
+  const exh=cur.ex?esc(cur.ex).replace(rx(cur.w),m=>`<b>${m}</b>`):'';
+  const back=`<p class="big">${esc(cur.w)} <button class="sp" id="spk" aria-label="Айту">🔊</button></p><p class="pos">${esc(cur.pos||'')}</p>
+    <p class="tr">${esc(cur.kz||'')}</p><p class="pos" style="font-size:15px">${esc(cur.tr||'')}</p>${exh?`<p class="ex">${exh}</p>`:''}`;
+  $('#study').innerHTML=`<div class="top"><span>Айналымда қалды: ${D.s.length}</span>
+    <select id="dir" aria-label="Бағыт"><option value="en">EN → аударма</option><option value="tr">Аударма → EN</option></select></div>
+    <div class="flash" id="fl" tabindex="0" role="button" aria-label="Карточканы аудару">${flipped?back:front}</div>
+    ${flipped?`<div class="row"><button class="s" id="again">Қайта көрсет</button><button class="p" id="know">Білемін ✓</button></div>`
+             :`<p class="hint">Карточканы басып аудар. Алдымен өзің есіңе түсіруге тырыс.</p>`}`;
+  $('#dir').value=dir;
+  $('#dir').onchange=e=>{dir=e.target.value;try{localStorage.setItem(DIR,dir)}catch(x){}renderCard()};
+  const fl=$('#fl');fl.onclick=e=>{if(e.target.closest('#spk')){say(cur.w);return}if(!flipped){flipped=true;renderCard()}};
+  fl.onkeydown=e=>{if((e.key==='Enter'||e.key===' ')&&!flipped){e.preventDefault();flipped=true;renderCard()}};
+  const a=$('#again');if(a){a.onclick=()=>{cur.box=1;save();requeue('s',cur.id,4);stats();nextCard()};
+    $('#know').onclick=()=>{cur.box=Math.min(5,cur.box+1);save();stats();nextCard()}}}
+
+/* Жаттығу */
+function nextQ(){
+  cur=take('p');answered=false;
+  const gap=cur.ex&&rx(cur.w).test(cur.ex)&&Math.random()<.6;
+  const q=gap?`<p class="q">${esc(cur.ex.replace(rx(cur.w),'______'))}</p><p class="pos">Көмек: ${esc(tx(cur))} (${esc(cur.pos||'')})</p>`
+            :`<p class="q">Ағылшынша жаз: <b>${esc(tx(cur))}</b></p><p class="pos">${esc(cur.pos||'')} · ${cur.w.length} әріп</p>`;
+  $('#practice').innerHTML=`<div class="top"><span>Айналымда қалды: ${D.p.length}</span></div>`+q+
+  `<input id="ans" autocomplete="off" autocapitalize="none" spellcheck="false" aria-label="Жауап">
+  <div class="row"><button class="p" id="chk">Тексеру</button><button class="s" id="skip">Өткізу</button></div><div id="fb" role="status"></div>`;
+  const a=$('#ans');a.focus();a.onkeydown=e=>{if(e.key==='Enter')check()};
+  $('#chk').onclick=check;$('#skip').onclick=()=>{requeue('p',cur.id,6);nextQ()}}
+function check(){
+  if(answered){nextQ();return}
+  const v=$('#ans').value.trim().toLowerCase();if(!v)return;
+  const ok=v===cur.w.toLowerCase();answered=true;
+  cur.box=ok?Math.min(5,cur.box+1):1;if(!ok)requeue('p',cur.id,5);save();stats();
+  $('#fb').innerHTML=ok?`<div class="fb ok">Дұрыс! ✓ <b>${esc(cur.w)}</b> — ${esc(tx(cur))}</div>`
+   :`<div class="fb no">Дұрыс жауап: <b>${esc(cur.w)}</b> — ${esc(tx(cur))}<br><i>${esc(cur.ex||'')}</i></div>`;
+  $('#chk').textContent='Келесі'}
+
+/* Сөз қосу */
+$('#save').onclick=()=>{
+  const w=$('#w').value.trim(),tr=$('#tr').value.trim(),kz=$('#kz').value.trim();
+  if(!w||(!tr&&!kz)){$('#msg').textContent='Сөз бен кемінде бір аударманы толтыр.';return}
+  if(words.some(x=>x.w.toLowerCase()===w.toLowerCase())){$('#msg').textContent='Бұл сөз бұрыннан бар.';return}
+  words.push({id:Date.now(),w,tr,kz,pos:$('#pos').value,ex:$('#ex').value.trim(),box:1,added:today()});
+  save();reset();['w','kz','tr','ex'].forEach(i=>$('#'+i).value='');$('#msg').textContent=`"${w}" қосылды ✓`;stats();$('#w').focus()};
+
+/* Тізім */
+function renderList(){
+  $('#items').innerHTML=words.slice().reverse().map(w=>`<div class="item"><div><b>${esc(w.w)}</b> <span>${esc(w.pos||'')}</span><br><span>${esc(tx(w))}</span></div><button data-id="${w.id}" aria-label="Жою">×</button></div>`).join('');
+  document.querySelectorAll('.item button').forEach(b=>b.onclick=()=>{words=words.filter(w=>String(w.id)!==b.dataset.id);save();reset();renderList();stats()})}
+$('#exp').onclick=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(words,null,1)],{type:'application/json'}));a.download='ielts-words.json';a.click()};
+let overwrite=false;
+$('#imp').onclick=()=>{overwrite=false;$('#file').click()};
+$('#impu').onclick=()=>{overwrite=true;$('#file').click()};
+$('#file').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();
+  r.onload=()=>{try{const d=JSON.parse(r.result);let n=0,u=0;
+    d.forEach(x=>{if(!x.w||!(x.tr||x.kz))return;
+      const y=words.find(y=>y.w.toLowerCase()===x.w.toLowerCase());
+      if(y){['tr','kz','pos','ex'].forEach(k=>{if(x[k]&&(overwrite||!y[k])&&y[k]!==x[k]){y[k]=x[k];u++}})}
+      else{words.push({id:Date.now()+Math.random(),w:x.w,tr:x.tr||'',kz:x.kz||'',pos:x.pos||'',ex:x.ex||'',box:1,added:today()});n++}});
+    save();reset();renderList();stats();alert(`Қосылды: ${n}, жаңартылды: ${u}`)}catch(err){alert('Файл оқылмады')}
+    e.target.value=''};r.readAsText(f)};
+
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>tab(b.dataset.t));
+tab('study');
+</script>
+</body>
+</html>
